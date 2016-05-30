@@ -1,4 +1,22 @@
 <resources>
     <string name="app_name">DongTaiZhengKun</string>
     <string name="action_settings">Settings</string>
+    <string name="send_date">发货时间</string>
+    <string name="No">货号</string>
+    <string name="branch">网点</string>
+    <string name="receiver_num">收货人电话</string>
+    <string name="receiver">收货人</string>
+    <string name="shipper">发货人</string>
+    <string name="shipper_num">发货人电话</string>
+    <string name="shipper_ID">发货人身份证号码</string>
+    <string name="outward">外转</string>
+    <string name="product_name">品名</string>
+    <string name="count">件数</string>
+    <string name="packing">包装</string>
+    <string name="insurance">保价</string>
+    <string name="prepay">现付</string>
+    <string name="afterpay">提付</string>
+    <string name="unrecev">代收款</string>
+    <string name="authors">受理人</string>
+    <string name="remark">备注</string>
 </resources>
