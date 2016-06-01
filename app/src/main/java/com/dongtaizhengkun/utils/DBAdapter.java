@@ -38,13 +38,5 @@ public class DBAdapter {
                                                     "shouli varchar(20)," +
                                                     "beizhu varchar(255))";
 
-    public static DBHelper send_contact;
-    public static DBHelper recv_contact;
-    public static DBHelper today_orders;
 
-    public DBAdapter(Context context) {
-        send_contact = (send_contact==null? new DBHelper(context, "send_contact", null, 1, SEND_CONTACT_SQL) : send_contact);
-        recv_contact = (recv_contact==null? new DBHelper(context, "recv_contact", null, 1, RECV_CONTACT_SQL) : recv_contact);
-        today_orders = (today_orders==null? new DBHelper(context, "today_orders", null, 1, TODAY_ORDERS_SQL) : today_orders);
-    }
 }

@@ -20,68 +20,21 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/send_date" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_weight="2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/No" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/branch" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:text="@string/receiver" />
 
             <EditText
+                android:id="@+id/recvname"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
         </LinearLayout>
+        <ListView
+            android:id="@+id/list_recv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+        </ListView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,6 +49,7 @@
                 android:text="@string/receiver_num" />
 
             <EditText
+                android:id="@+id/recvnum"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -114,6 +68,7 @@
                 android:text="@string/shipper" />
 
             <EditText
+                android:id="@+id/sendname"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -132,6 +87,7 @@
                 android:text="@string/shipper_num" />
 
             <EditText
+                android:id="@+id/sendnum"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -150,6 +106,7 @@
                 android:text="@string/shipper_ID" />
 
             <EditText
+                android:id="@+id/sendid"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -168,6 +125,7 @@
                 android:text="@string/outward" />
 
             <EditText
+                android:id="@+id/outward"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -186,6 +144,7 @@
                 android:text="@string/product_name" />
 
             <EditText
+                android:id="@+id/product_name"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -204,6 +163,7 @@
                 android:text="@string/count" />
 
             <EditText
+                android:id="@+id/count"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -222,6 +182,7 @@
                 android:text="@string/packing" />
 
             <EditText
+                android:id="@+id/packing"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -240,6 +201,7 @@
                 android:text="@string/insurance" />
 
             <EditText
+                android:id="@+id/insurance"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -258,6 +220,7 @@
                 android:text="@string/prepay" />
 
             <EditText
+                android:id="@+id/prepay"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -276,6 +239,7 @@
                 android:text="@string/afterpay" />
 
             <EditText
+                android:id="@+id/afterpay"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -294,24 +258,7 @@
                 android:text="@string/unrecev" />
 
             <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/authors" />
-
-            <EditText
+                android:id="@+id/unrecev"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
@@ -330,14 +277,17 @@
                 android:text="@string/remark" />
 
             <EditText
+                android:id="@+id/remark"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
+                android:id="@+id/commit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/commit"/>
