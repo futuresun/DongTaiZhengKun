@@ -9,8 +9,17 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
-    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    private static DBHelper dbHelper;
+
+    private DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+    }
+
+    public static DBHelper getInstance(Context context) {
+        if(dbHelper == null) {
+            dbHelper = new DBHelper(context, "local_data", null, 1);
+        }
+        return dbHelper;
     }
 
     @Override
@@ -18,6 +27,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(DBAdapter.SEND_CONTACT_SQL);
         db.execSQL(DBAdapter.RECV_CONTACT_SQL);
         db.execSQL(DBAdapter.TODAY_ORDERS_SQL);
+        db.execSQL(DBAdapter.DESTINATION_SQL);
+        db.execSQL(DBAdapter.OUT_STATION_SQL);
+        db.execSQL(DBAdapter.PRODUCT_NAME_SQL);
+        db.execSQL(DBAdapter.PACKING_SQL);
     }
 
     @Override

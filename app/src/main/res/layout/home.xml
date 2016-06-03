@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dip">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="网点编号"/>
+        <EditText
+            android:id="@+id/netnum"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/editt"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:digits="1234567890"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="网点地址"/>
+        <EditText
+            android:id="@+id/netname"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/editt"
+            android:textSize="20sp"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dip"
+        android:paddingBottom="20dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="受理人"/>
+        <EditText
+            android:id="@+id/authors"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/editt"
+            android:textSize="20sp"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="网点信息配置"/>
+
+    <Button
+        android:id="@+id/deletelist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="清空订单缓存数据"/>
+
+    <Button
+        android:id="@+id/deletecontact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="清空联系人数据"/>
+
+</LinearLayout>
