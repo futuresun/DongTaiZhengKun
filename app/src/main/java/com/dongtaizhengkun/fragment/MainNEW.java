@@ -258,7 +258,7 @@ public class MainNEW extends Fragment implements View.OnClickListener {
                     SharedPreferences settings = this.getContext().getSharedPreferences("netsetting", 0);
 
                     Date date = new Date();
-                    SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                    SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                     SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyMMdd");
                     SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -292,7 +292,7 @@ public class MainNEW extends Fragment implements View.OnClickListener {
                                            + "," + afterpay.getText().toString()
                                            + "," + unrecev.getText().toString()
                                            + ",'" + settings.getString("authors","")//shouli
-                                           + "','" + remark.getText().toString() + "')");
+                                           + "','" + remark.getText().toString() + "', \"\", 'NO')");
                     break;
                 default:
                     break;

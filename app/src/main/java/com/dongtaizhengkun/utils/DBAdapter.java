@@ -60,7 +60,9 @@ public class DBAdapter {
                                                     "tifu int," +
                                                     "daishou int," +
                                                     "shouli varchar(20)," +
-                                                    "beizhu varchar(255))";
+                                                    "beizhu varchar(255)," +
+                                                    "xiugaibeizhu varchar(255)," +
+                                                    "net varchar(20))";
 
 
 }
