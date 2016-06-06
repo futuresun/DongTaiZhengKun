@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DongTaiZhengKun.iml" filepath="$PROJECT_DIR$/DongTaiZhengKun.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PrinterLibs/PrinterLibs.iml" filepath="$PROJECT_DIR$/PrinterLibs/PrinterLibs.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zirco-browser/zirco-browser.iml" filepath="$PROJECT_DIR$/zirco-browser/zirco-browser.iml" />
     </modules>
   </component>
 </project>
