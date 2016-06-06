@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SearchBTActivity"></activity>
+        <activity android:name=".FormActivity"></activity>
         <service android:name=".utils.WorkService" />
     </application>
 

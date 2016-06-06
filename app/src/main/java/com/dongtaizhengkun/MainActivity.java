@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dbHelper = DBHelper.getInstance(this);
 
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
-        sqLiteDatabase.execSQL("insert into recv_contact values('冯麒', 18328346188, 1)," +
-                "('冯敬', 18318396610, 2),('梁贵', 18745638712, 8)," +
+        sqLiteDatabase.execSQL("insert into recv_contact values('冯啊', 18328346188, 1)," +
+                "('冯的', 18318396610, 2),('梁就', 18745638712, 8)," +
                 "('冯飞', 18328396610, 3),('冯跑', 18765638712, 3)," +
                 "('冯发', 18338396610, 4),('冯我', 18775638712, 4)," +
                 "('冯个', 18348396610, 5),('冯人', 18785638712, 2)," +

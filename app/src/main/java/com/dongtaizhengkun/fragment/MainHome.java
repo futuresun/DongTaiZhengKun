@@ -3,7 +3,6 @@ package com.dongtaizhengkun.fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dongtaizhengkun.FormActivity;
 import com.dongtaizhengkun.R;
 import com.dongtaizhengkun.SearchBTActivity;
 import com.dongtaizhengkun.utils.WorkService;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-
 /**
  * Created by Administrator on 2016/6/2.
  */
@@ -38,6 +37,8 @@ public class MainHome extends Fragment implements View.OnClickListener {
     private Button deletecontactBtn;
     @ViewInject(R.id.BTconnect)
     private Button BTconnect;
+    @ViewInject(R.id.printForm)
+    private Button printForm;
 
     SharedPreferences settings;
 
@@ -50,6 +51,9 @@ public class MainHome extends Fragment implements View.OnClickListener {
         init(inflater);
         saveBtn.setOnClickListener(this);
         BTconnect.setOnClickListener(this);
+        deletelistBtn.setOnClickListener(this);
+        deletecontactBtn.setOnClickListener(this);
+        printForm.setOnClickListener(this);
 
         if (null == WorkService.workThread) {
             Intent intent = new Intent(this.getContext(), WorkService.class);
@@ -75,6 +79,7 @@ public class MainHome extends Fragment implements View.OnClickListener {
                 editor.putString("netname",netname.getText().toString());
                 editor.putString("authors", authors.getText().toString());
                 editor.commit();
+                Toast.makeText(this.getContext(), "网点信息设置成功", Toast.LENGTH_LONG).show();
                 break;
             case R.id.deletelist:
                 break;
@@ -82,6 +87,9 @@ public class MainHome extends Fragment implements View.OnClickListener {
                 break;
             case R.id.BTconnect:
                 startActivity(new Intent(this.getContext(), SearchBTActivity.class));
+                break;
+            case R.id.printForm:
+                startActivity(new Intent(this.getContext(), FormActivity.class));
                 break;
             default:
                 break;

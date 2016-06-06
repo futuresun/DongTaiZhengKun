@@ -199,6 +199,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
                                     flag = true;
                                 }
                                 contentValues.put("net", "NO");
+                                contentValues.put("xiugaibeizhu", xiugai);
                                 SQLiteDatabase sqLiteDatabase = DBHelper.getInstance(MainToday.this.getContext()).getReadableDatabase();
                                 sqLiteDatabase.update("today_orders", contentValues, "senddate = ?", new String[]{listtime});
                                 MainToday.this.onClick(todayBtn);
@@ -209,7 +210,8 @@ public class MainToday extends Fragment implements View.OnClickListener {
                         new AlertDialog.Builder(MainToday.this.getContext()).setTitle("删除订单").setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
+                                SQLiteDatabase sqLiteDatabase = DBHelper.getInstance(MainToday.this.getContext()).getReadableDatabase();
+                                sqLiteDatabase.execSQL("update today_orders set deleteornot='YES',net='NO' where senddate='" + listtime + "'");
                             }
                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
@@ -218,19 +220,6 @@ public class MainToday extends Fragment implements View.OnClickListener {
                         }).show();
                     }
                 }).show();
-
-
-                /*final AlertDialog dialog = builder.create();
-
-                sdate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (hasFocus) {
-                            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                        }
-                    }
-                });
-                dialog.show();*/
             }
         });
 
@@ -246,7 +235,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 cursor = dbHelper.getReadableDatabase().query("today_orders", new String[]{"senddate", "recvname", "recvnum",
                         "destination", "out", "sendname", "sendnum", "sendid", "pinname", "package", "count", "baojia",
-                        "xianfu", "tifu", "daishou", "xiugaibeizhu"}, "senddate like ?", new String[]{simpleDateFormat.format(date) + "%"}, null, null, null, null);
+                        "xianfu", "tifu", "daishou", "xiugaibeizhu"}, "senddate like ? and deleteornot='NO'", new String[]{simpleDateFormat.format(date) + "%"}, null, null, null, null);
                 List<String> data = new ArrayList<String>();
                 data1 = new ArrayList<List<String>>();
                 while (cursor.moveToNext()) {
@@ -283,17 +272,19 @@ public class MainToday extends Fragment implements View.OnClickListener {
                             SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
                             Cursor netCursor = dbHelper.getReadableDatabase().query("today_orders", new String[]{"senddate", "recvname", "recvnum",
                                     "destination", "out", "sendname", "sendnum", "sendid", "pinname", "package", "count", "baojia",
-                                    "xianfu", "tifu", "daishou"}, "senddate like ?", new String[]{"%"}, null, null, null, null);
+                                    "xianfu", "tifu", "daishou","beizhu","xiugaibeizhu","deleteornot"}, "senddate like ? and net='NO'", new String[]{"%"}, null, null, null, null);
 
                             while (netCursor.moveToNext()) {
-
+                                sqLiteDatabase.execSQL("update today_orders set net='YES' where senddate='" + netCursor.getString(0) + "'");
                                 String data = "senddate=" + URLEncoder.encode(netCursor.getString(0), "utf-8") + "&recvname=" + URLEncoder.encode(netCursor.getString(1), "utf-8") + "&recvnum=" + URLEncoder.encode(netCursor.getString(2), "utf-8")
                                         + "&destination=" + URLEncoder.encode(netCursor.getString(3), "utf-8") + "&out=" + URLEncoder.encode(netCursor.getString(4), "utf-8")
                                         + "&sendname=" + URLEncoder.encode(netCursor.getString(5), "utf-8") + "&sendnum=" + URLEncoder.encode(netCursor.getString(6), "utf-8")
                                         + "&sendid=" + URLEncoder.encode(netCursor.getString(7), "utf-8") + "&pinname=" + URLEncoder.encode(netCursor.getString(8), "utf-8")
                                         + "&package=" + URLEncoder.encode(netCursor.getString(9), "utf-8") + "&count=" + URLEncoder.encode(netCursor.getString(10), "utf-8")
                                         + "&baojia=" + URLEncoder.encode(netCursor.getString(11), "utf-8") + "&xianfu=" + URLEncoder.encode(netCursor.getString(12), "utf-8")
-                                        + "&tifu=" + URLEncoder.encode(netCursor.getString(13), "utf-8") + "&daishou=" + URLEncoder.encode(netCursor.getString(14), "utf-8");
+                                        + "&tifu=" + URLEncoder.encode(netCursor.getString(13), "utf-8") + "&daishou=" + URLEncoder.encode(netCursor.getString(14), "utf-8")
+                                        + "&beizhu=" + URLEncoder.encode(netCursor.getString(15), "utf-8") + "&xiugaibeizhu=" + URLEncoder.encode(netCursor.getString(16), "utf-8")
+                                        + "&deleteornot=" + URLEncoder.encode(netCursor.getString(17), "utf-8");
                                 String urlEncoding = "http://192.168.1.13:8080/dongtai/servlet/DongTaiServlet?" + data;
                                 URL url = new URL(urlEncoding);
                                 //System.out.println("urlEncoding------------>" + urlEncoding);

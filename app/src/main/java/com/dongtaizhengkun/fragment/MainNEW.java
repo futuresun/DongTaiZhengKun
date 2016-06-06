@@ -1,12 +1,15 @@
 package com.dongtaizhengkun.fragment;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dongtaizhengkun.R;
+import com.dongtaizhengkun.WelcomeActivity;
 import com.dongtaizhengkun.utils.DBHelper;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -96,6 +100,23 @@ public class MainNEW extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        //先判断是否进行了网点的配置
+        SharedPreferences settings = inflater.getContext().getSharedPreferences("netsetting", 0);
+        if(settings.getString("netnum","").equals("") || settings.getString("netname","").equals("") || settings.getString("authors","").equals("")) {
+            new AlertDialog.Builder(MainNEW.this.getContext()).setTitle("未配置网点信息").setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    android.support.v4.app.FragmentManager fragmentManager = MainNEW.this.getFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragmentId, new MainHome());
+                    transaction.commit();
+                    WelcomeActivity.mainBtn.setChecked(true);
+                }
+            }).show();
+        }
+
+
         view = inflater.inflate(R.layout.main_layout, null);
         ViewUtils.inject(this, view);
 
@@ -292,7 +313,7 @@ public class MainNEW extends Fragment implements View.OnClickListener {
                                            + "," + afterpay.getText().toString()
                                            + "," + unrecev.getText().toString()
                                            + ",'" + settings.getString("authors","")//shouli
-                                           + "','" + remark.getText().toString() + "', \"\", 'NO')");
+                                           + "','" + remark.getText().toString() + "', \"\", 'NO', 'NO')");
                     break;
                 default:
                     break;

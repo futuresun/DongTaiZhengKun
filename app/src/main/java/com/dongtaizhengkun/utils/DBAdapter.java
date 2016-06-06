@@ -62,7 +62,8 @@ public class DBAdapter {
                                                     "shouli varchar(20)," +
                                                     "beizhu varchar(255)," +
                                                     "xiugaibeizhu varchar(255)," +
-                                                    "net varchar(20))";
+                                                    "net varchar(20)," +
+                                                    "deleteornot varchar(20))";
 
 
 }

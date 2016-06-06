@@ -25,7 +25,7 @@ public class WelcomeActivity extends FragmentActivity implements RadioGroup.OnCh
     @ViewInject(R.id.selectId)
     private RadioGroup radioGroup;
     @ViewInject(R.id.homeId)
-    private RadioButton mainBtn;
+    public static RadioButton mainBtn;
 
     private FragmentManager fragmentManager;
 
