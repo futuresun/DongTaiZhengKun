@@ -1,5 +1,6 @@
 package com.dongtaizhengkun.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dongtaizhengkun.R;
+import com.dongtaizhengkun.SearchBTActivity;
+import com.dongtaizhengkun.utils.WorkService;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -33,6 +36,8 @@ public class MainHome extends Fragment implements View.OnClickListener {
     private Button deletelistBtn;
     @ViewInject(R.id.deletecontact)
     private Button deletecontactBtn;
+    @ViewInject(R.id.BTconnect)
+    private Button BTconnect;
 
     SharedPreferences settings;
 
@@ -44,6 +49,13 @@ public class MainHome extends Fragment implements View.OnClickListener {
         netnum.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         init(inflater);
         saveBtn.setOnClickListener(this);
+        BTconnect.setOnClickListener(this);
+
+        if (null == WorkService.workThread) {
+            Intent intent = new Intent(this.getContext(), WorkService.class);
+            this.getContext().startService(intent);
+        }
+
         return view;
     }
 
@@ -64,6 +76,17 @@ public class MainHome extends Fragment implements View.OnClickListener {
                 editor.putString("authors", authors.getText().toString());
                 editor.commit();
                 break;
+            case R.id.deletelist:
+                break;
+            case R.id.deletecontact:
+                break;
+            case R.id.BTconnect:
+                startActivity(new Intent(this.getContext(), SearchBTActivity.class));
+                break;
+            default:
+                break;
+
         }
     }
+
 }
