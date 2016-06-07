@@ -29,9 +29,13 @@ import android.widget.Toast;
 import com.dongtaizhengkun.R;
 import com.dongtaizhengkun.WelcomeActivity;
 import com.dongtaizhengkun.utils.DBHelper;
+import com.dongtaizhengkun.utils.Global;
+import com.dongtaizhengkun.utils.WorkService;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lvrenyang.utils.DataUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,13 +101,14 @@ public class MainNEW extends Fragment implements View.OnClickListener {
 
     View view;
     DBHelper dbHelper;
+    boolean printFlag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //先判断是否进行了网点的配置
         SharedPreferences settings = inflater.getContext().getSharedPreferences("netsetting", 0);
-        if(settings.getString("netnum","").equals("") || settings.getString("netname","").equals("") || settings.getString("authors","").equals("")) {
+        if (settings.getString("netnum", "").equals("") || settings.getString("netname", "").equals("") || settings.getString("authors", "").equals("")) {
             new AlertDialog.Builder(MainNEW.this.getContext()).setTitle("未配置网点信息").setPositiveButton("确认", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -214,106 +219,179 @@ public class MainNEW extends Fragment implements View.OnClickListener {
                 packing.getText().toString().equals("") || count.getText().toString().equals("") ||
                 insurance.getText().toString().equals("") || prepay.getText().toString().equals("") ||
                 afterpay.getText().toString().equals("") || unrecev.getText().toString().equals("")) {
-                new AlertDialog.Builder(this.getContext()).setTitle("请输入完整的订单信息").show();
+            new AlertDialog.Builder(this.getContext()).setTitle("请输入完整的订单信息").setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            }).show();
 
         } else {
             switch (v.getId()) {
                 case R.id.commit:
-                    SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
-                    //数据库保存
-                    //收货方联系人
-                    if (sqLiteDatabase.query("recv_contact", new String[]{"name"}, "name = ?",
-                            new String[]{recvname.getText().toString()}, null, null, null, null).moveToFirst()) {
-                        sqLiteDatabase.execSQL("update recv_contact set num=" + recvnum.getText().toString() + ", hot=hot+1" +
-                                " where name='" + recvname.getText().toString() + "'");
-                    } else {
-                        sqLiteDatabase.execSQL("insert into recv_contact values('" + recvname.getText().toString()
-                                + "', " + recvnum.getText().toString() + ", 1)");
-                    }
-                    //发货方联系人
-                    if (sqLiteDatabase.query("send_contact", new String[]{"name"}, "name = ?",
-                            new String[]{sendname.getText().toString()}, null, null, null, null).moveToFirst()) {
-                        sqLiteDatabase.execSQL("update send_contact set num=" + sendnum.getText().toString() + ", hot=hot+1, id=" +
-                                sendid.getText().toString() + " where name='" + sendname.getText().toString() + "'");
-                    } else {
-                        sqLiteDatabase.execSQL("insert into send_contact values('" + sendname.getText().toString()
-                                + "', " + sendnum.getText().toString() + "," + sendid.getText().toString() + ", 1)");
-                    }
-                    //到站
-                    if (sqLiteDatabase.query("destination", new String[]{"name"}, "name = ?",
-                            new String[]{destination.getText().toString()}, null, null, null, null).moveToFirst()) {
-                        sqLiteDatabase.execSQL("update destination set hot=hot+1" +
-                                " where name='" + destination.getText().toString() + "'");
-                    } else {
-                        sqLiteDatabase.execSQL("insert into destination values('" + destination.getText().toString()
-                                + "', " + "1)");
-                    }
-                    //外转
-                    if (sqLiteDatabase.query("out_station", new String[]{"name"}, "name = ?",
-                            new String[]{outward.getText().toString()}, null, null, null, null).moveToFirst()) {
-                        sqLiteDatabase.execSQL("update out_station set hot=hot+1" +
-                                " where name='" + outward.getText().toString() + "'");
-                    } else {
-                        sqLiteDatabase.execSQL("insert into out_station values('" + outward.getText().toString()
-                                + "', " + "1)");
-                    }
-                    //品名
-                    if (sqLiteDatabase.query("product_name", new String[]{"name"}, "name = ?",
-                            new String[]{product_name.getText().toString()}, null, null, null, null).moveToFirst()) {
-                        sqLiteDatabase.execSQL("update product_name set hot=hot+1" +
-                                " where name='" + product_name.getText().toString() + "'");
-                    } else {
-                        sqLiteDatabase.execSQL("insert into product_name values('" + product_name.getText().toString()
-                                + "', " + "1)");
-                    }
-                    //包装
-                    if (sqLiteDatabase.query("packing", new String[]{"name"}, "name = ?",
-                            new String[]{packing.getText().toString()}, null, null, null, null).moveToFirst()) {
-                        sqLiteDatabase.execSQL("update packing set hot=hot+1" +
-                                " where name='" + packing.getText().toString() + "'");
-                    } else {
-                        sqLiteDatabase.execSQL("insert into packing values('" + packing.getText().toString()
-                                + "', " + "1)");
-                    }
 
-                    SharedPreferences settings = this.getContext().getSharedPreferences("netsetting", 0);
+                    new AlertDialog.Builder(this.getContext()).setTitle("确认保存并打印订单").setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+                            //数据库保存
+                            //收货方联系人
+                            if (sqLiteDatabase.query("recv_contact", new String[]{"name"}, "name = ?",
+                                    new String[]{recvname.getText().toString()}, null, null, null, null).moveToFirst()) {
+                                sqLiteDatabase.execSQL("update recv_contact set num=" + recvnum.getText().toString() + ", hot=hot+1" +
+                                        " where name='" + recvname.getText().toString() + "'");
+                            } else {
+                                sqLiteDatabase.execSQL("insert into recv_contact values('" + recvname.getText().toString()
+                                        + "', " + recvnum.getText().toString() + ", 1)");
+                            }
+                            //发货方联系人
+                            if (sqLiteDatabase.query("send_contact", new String[]{"name"}, "name = ?",
+                                    new String[]{sendname.getText().toString()}, null, null, null, null).moveToFirst()) {
+                                sqLiteDatabase.execSQL("update send_contact set num=" + sendnum.getText().toString() + ", hot=hot+1, id=" +
+                                        sendid.getText().toString() + " where name='" + sendname.getText().toString() + "'");
+                            } else {
+                                sqLiteDatabase.execSQL("insert into send_contact values('" + sendname.getText().toString()
+                                        + "', " + sendnum.getText().toString() + "," + sendid.getText().toString() + ", 1)");
+                            }
+                            //到站
+                            if (sqLiteDatabase.query("destination", new String[]{"name"}, "name = ?",
+                                    new String[]{destination.getText().toString()}, null, null, null, null).moveToFirst()) {
+                                sqLiteDatabase.execSQL("update destination set hot=hot+1" +
+                                        " where name='" + destination.getText().toString() + "'");
+                            } else {
+                                sqLiteDatabase.execSQL("insert into destination values('" + destination.getText().toString()
+                                        + "', " + "1)");
+                            }
+                            //外转
+                            if (sqLiteDatabase.query("out_station", new String[]{"name"}, "name = ?",
+                                    new String[]{outward.getText().toString()}, null, null, null, null).moveToFirst()) {
+                                sqLiteDatabase.execSQL("update out_station set hot=hot+1" +
+                                        " where name='" + outward.getText().toString() + "'");
+                            } else {
+                                sqLiteDatabase.execSQL("insert into out_station values('" + outward.getText().toString()
+                                        + "', " + "1)");
+                            }
+                            //品名
+                            if (sqLiteDatabase.query("product_name", new String[]{"name"}, "name = ?",
+                                    new String[]{product_name.getText().toString()}, null, null, null, null).moveToFirst()) {
+                                sqLiteDatabase.execSQL("update product_name set hot=hot+1" +
+                                        " where name='" + product_name.getText().toString() + "'");
+                            } else {
+                                sqLiteDatabase.execSQL("insert into product_name values('" + product_name.getText().toString()
+                                        + "', " + "1)");
+                            }
+                            //包装
+                            if (sqLiteDatabase.query("packing", new String[]{"name"}, "name = ?",
+                                    new String[]{packing.getText().toString()}, null, null, null, null).moveToFirst()) {
+                                sqLiteDatabase.execSQL("update packing set hot=hot+1" +
+                                        " where name='" + packing.getText().toString() + "'");
+                            } else {
+                                sqLiteDatabase.execSQL("insert into packing values('" + packing.getText().toString()
+                                        + "', " + "1)");
+                            }
 
-                    Date date = new Date();
-                    SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyMMdd");
-                    SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("yyyy-MM-dd");
+                            SharedPreferences settings = MainNEW.this.getContext().getSharedPreferences("netsetting", 0);
 
-                    int todayConut = 0;
+                            Date date = new Date();
+                            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyMMdd");
+                            SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("yyyy-MM-dd");
 
-                    //当天的单号
-                    Cursor cursor = dbHelper.getReadableDatabase().query("today_orders", new String[]{"senddate"}, "senddate like ?",
-                            new String[]{simpleDateFormat3.format(date) + "%"}, null, null, null, null);
-                    while(cursor.moveToNext()) {
-                        todayConut++;
-                    }
+                            int todayConut = 0;
 
-                    String goodNum = settings.getString("netnum","") + "-XX-" + simpleDateFormat2.format(date) + "-" + todayConut + "-" + count.getText().toString();
-                    //订单详情
-                    sqLiteDatabase.execSQL("insert into today_orders values(" + settings.getString("netnum","")//netpoint
-                                           + ",'" + settings.getString("netname","")//netname
-                                           + "','" + simpleDateFormat1.format(date)//senddate
-                                           + "','" + goodNum//goodno
-                                           + "','" + sendname.getText().toString()
-                                           + "'," + sendnum.getText().toString()
-                                           + "," + sendid.getText().toString()
-                                           + ",'" + recvname.getText().toString()
-                                           + "'," + recvnum.getText().toString()
-                                           + ",'" + destination.getText().toString()
-                                           + "','" + outward.getText().toString()
-                                           + "','" + product_name.getText().toString()
-                                           + "'," + count.getText().toString()
-                                           + ",'" + packing.getText().toString()
-                                           + "'," + insurance.getText().toString()
-                                           + "," + prepay.getText().toString()
-                                           + "," + afterpay.getText().toString()
-                                           + "," + unrecev.getText().toString()
-                                           + ",'" + settings.getString("authors","")//shouli
-                                           + "','" + remark.getText().toString() + "', \"\", 'NO', 'NO')");
+                            //当天的单号
+                            Cursor cursor = dbHelper.getReadableDatabase().query("today_orders", new String[]{"senddate"}, "senddate like ?",
+                                    new String[]{simpleDateFormat3.format(date) + "%"}, null, null, null, null);
+                            while (cursor.moveToNext()) {
+                                todayConut++;
+                            }
+
+                            String goodNum = settings.getString("netnum", "") + "-XX-" + simpleDateFormat2.format(date) + "-" + todayConut + "-" + count.getText().toString();
+                            //订单详情
+                            sqLiteDatabase.execSQL("insert into today_orders values(" + settings.getString("netnum", "")//netpoint
+                                    + ",'" + settings.getString("netname", "")//netname
+                                    + "','" + simpleDateFormat1.format(date)//senddate
+                                    + "','" + goodNum//goodno
+                                    + "','" + sendname.getText().toString()
+                                    + "'," + sendnum.getText().toString()
+                                    + "," + sendid.getText().toString()
+                                    + ",'" + recvname.getText().toString()
+                                    + "'," + recvnum.getText().toString()
+                                    + ",'" + destination.getText().toString()
+                                    + "','" + outward.getText().toString()
+                                    + "','" + product_name.getText().toString()
+                                    + "'," + count.getText().toString()
+                                    + ",'" + packing.getText().toString()
+                                    + "'," + insurance.getText().toString()
+                                    + "," + prepay.getText().toString()
+                                    + "," + afterpay.getText().toString()
+                                    + "," + unrecev.getText().toString()
+                                    + ",'" + settings.getString("authors", "")//shouli
+                                    + "','" + remark.getText().toString() + "', \"\", 'NO', 'NO')");
+
+
+                            //打印订单
+                            byte[] setHT1 = {0x1b, 0x44, 0x18, 0x00};
+                            byte[] setKB1 = {0x1b, 0x40, 0x1d, 0x21, 0x01, 0x1b, 0x33, (byte) 0x80, 0x1d, 0x4c, 0x60, 0x00};
+                            byte[] setHT2 = {0x1b, 0x44, 0x15, 0x00};
+                            byte[] setKB2 = {0x1b, 0x40, 0x1d, 0x21, 0x01, 0x1b, 0x33, (byte) 0x80, 0x1d, 0x4c, 0x08, 0x00};
+                            byte[] setKB3 = {0x1b, 0x40, 0x1d, 0x21, 0x00, 0x1b, 0x33, (byte) 0x60, 0x1d, 0x4c, 0x08, 0x00};
+                            byte[] setKB4 = {0x1b, 0x40, 0x1d, 0x21, 0x00, 0x1b, 0x33, (byte) 0x80, 0x1d, 0x4c, 0x08, 0x00};
+                            byte[] setHT3 = {0x1b, 0x44, 0x06, 0x0e, 0x16, 0x00};
+                            byte[] setHT4 = {0x1b, 0x44, 0x0a, 0x00};
+                            byte[] HT = {0x09};
+                            byte[] LF = {0x0d, 0x0a};
+                            byte[][] allbuf;
+
+                            try {
+                                allbuf = new byte[][]{
+
+                                        setKB1, "东泰正坤".getBytes("gbk"), "  ".getBytes("gbk"), "受理单".getBytes("gbk"), LF,
+                                        setKB2, setHT2, "发货时期".getBytes("gbk"), HT, simpleDateFormat1.format(date).getBytes("gbk"), LF,
+                                        setKB2, setHT2, "货号".getBytes("gbk"), HT, goodNum.getBytes("gbk"), LF,
+                                        setKB2, setHT3, "网点".getBytes("gbk"), HT, settings.getString("netname", "").getBytes("gbk"), HT, "单号".getBytes("gbk"), HT, goodNum.getBytes("gbk"), LF,
+                                        setKB2, setHT3, "起站".getBytes("gbk"), HT, settings.getString("netname", "").getBytes("gbk"), HT, "收货方".getBytes("gbk"), HT, recvname.getText().toString().getBytes("gbk"), LF,
+                                        setKB2, setHT3, "到站".getBytes("gbk"), HT, destination.getText().toString().getBytes("gbk"), HT, "电话".getBytes("gbk"), HT, recvnum.getText().toString().getBytes("gbk"), LF,
+                                        setKB2, setHT3, "外转".getBytes("gbk"), HT, outward.getText().toString().getBytes("gbk"), HT, "发货方".getBytes("gbk"), HT, sendname.getText().toString().getBytes("gbk"), LF,
+                                        setKB2, setHT3, "品名".getBytes("gbk"), HT, product_name.getText().toString().getBytes("gbk"), HT, "件数".getBytes("gbk"), HT, count.getText().toString().getBytes("gbk"), LF,
+                                        setKB2, setHT3, "保价".getBytes("gbk"), HT, insurance.getText().toString().getBytes("gbk"), HT, "现付".getBytes("gbk"), HT, prepay.getText().toString().getBytes("gbk"), LF,
+                                        setKB2, setHT3, "包装".getBytes("gbk"), HT, packing.getText().toString().getBytes("gbk"), HT, "提付".getBytes("gbk"), HT, afterpay.getText().toString().getBytes("gbk"), LF,
+                                        setKB2, setHT3, "受理".getBytes("gbk"), HT, settings.getString("authors", "").getBytes("gbk"), HT, "代收".getBytes("gbk"), HT, unrecev.getText().toString().getBytes("gbk"), LF,
+                                        setKB2, setHT4, "代收".getBytes("gbk"), HT, "呵呵".getBytes("gbk"), LF,
+                                        setKB2, setHT4, "备注".getBytes("gbk"), HT, remark.getText().toString().getBytes("gbk"), LF,
+                                        setKB3, "———————————————".getBytes("gbk"), LF,
+                                        setKB3, setHT4, "发货电话:".getBytes("gbk"), HT, "028-83421808".getBytes("gbk"), LF,
+                                        setKB3, setHT4, "到站电话:".getBytes("gbk"), HT, "028-63924228".getBytes("gbk"), LF,
+                                        setKB3, setHT4, "代收款打款查询:".getBytes("gbk"), HT, "136 6624 1257".getBytes("gbk"), LF,
+                                        setKB3, setHT4, "代收款打款查询:".getBytes("gbk"), HT, "189 8055 9461".getBytes("gbk"), LF,
+                                        setKB3, setHT4, "投诉电话:".getBytes("gbk"), HT, "150 0284 8419".getBytes("gbk"), LF,
+                                        setKB3, "附记:".getBytes("gbk"), LF,
+                                        setKB3, "取得本受理单，视为已认可东泰正坤公示的《委托运输合同条款》及确认以上内容准确无误，愿承担相应的责任。".getBytes("gbk"), LF,
+                                        setKB3, "———————————————".getBytes("gbk"), LF,
+                                        setKB2, "取货人签字:".getBytes("gbk"), LF,
+                                        setKB2, "证件号码:".getBytes("gbk"), LF, LF
+                                };
+                                byte[] buf = DataUtils.byteArraysToBytes(allbuf);
+                                if (WorkService.workThread.isConnected()) {
+                                    Bundle data = new Bundle();
+                                    data.putByteArray(Global.BYTESPARA1, buf);
+                                    data.putInt(Global.INTPARA1, 0);
+                                    data.putInt(Global.INTPARA2, buf.length);
+                                    WorkService.workThread.handleCmd(Global.CMD_POS_WRITE, data);
+                                } else {
+                                    Toast.makeText(MainNEW.this.getContext(), Global.toast_notconnect, Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+
+
                     break;
                 default:
                     break;
