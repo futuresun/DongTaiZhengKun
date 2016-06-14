@@ -121,7 +121,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
 
                 //最开始是系统的键盘输入方式没设置正确，导致不弹出软键盘
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainToday.this.getContext());
-                builder.setView(myView)
+                builder.setTitle("订单详情").setView(myView)
                         .setPositiveButton("修改订单", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -269,6 +269,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
                         try {
+
                             SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
                             Cursor netCursor = dbHelper.getReadableDatabase().query("today_orders", new String[]{"senddate", "recvname", "recvnum",
                                     "destination", "out", "sendname", "sendnum", "sendid", "pinname", "package", "count", "baojia",
@@ -285,9 +286,10 @@ public class MainToday extends Fragment implements View.OnClickListener {
                                         + "&tifu=" + URLEncoder.encode(netCursor.getString(13), "utf-8") + "&daishou=" + URLEncoder.encode(netCursor.getString(14), "utf-8")
                                         + "&beizhu=" + URLEncoder.encode(netCursor.getString(15), "utf-8") + "&xiugaibeizhu=" + URLEncoder.encode(netCursor.getString(16), "utf-8")
                                         + "&deleteornot=" + URLEncoder.encode(netCursor.getString(17), "utf-8");
-                                String urlEncoding = "http://192.168.1.13:8080/dongtai/servlet/DongTaiServlet?" + data;
+                                //String urlEncoding = "http://192.168.1.13:8080/dongtai/servlet/DongTaiServlet?" + data;
+                                String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/DongTaiServlet?" + data;
                                 URL url = new URL(urlEncoding);
-                                //System.out.println("urlEncoding------------>" + urlEncoding);
+                                System.out.println("urlEncoding------------>" + urlEncoding);
                                 HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
                                 httpUrlConnection.setRequestMethod("GET");
                                 //httpUrlConnection.setConnectTimeout(10000);
