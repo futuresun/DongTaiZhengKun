@@ -11,7 +11,7 @@ public class DBAdapter {
     public static final String SEND_CONTACT_SQL = "create table send_contact(" +
                                                     "name varchar(20)," +
                                                     "num int," +
-                                                    "id int," +
+                                                    "id varchar(50)," +
                                                     "hot int)";
     //收货联系人
     public static final String RECV_CONTACT_SQL = "create table recv_contact(" +

@@ -1,10 +1,13 @@
 package com.dongtaizhengkun.fragment;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -212,6 +215,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
                             public void onClick(DialogInterface dialog, int which) {
                                 SQLiteDatabase sqLiteDatabase = DBHelper.getInstance(MainToday.this.getContext()).getReadableDatabase();
                                 sqLiteDatabase.execSQL("update today_orders set deleteornot='YES',net='NO' where senddate='" + listtime + "'");
+                                MainToday.this.onClick(todayBtn);
                             }
                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
@@ -265,15 +269,20 @@ public class MainToday extends Fragment implements View.OnClickListener {
                 MyTextWatcher.setListViewHeightBasedOnChildren(todaylist);
                 break;
             case R.id.netid:
-                new Thread() {
+
+                new AsyncTask<Void, Integer, Void>() {
+                    private ProgressDialog dialog = null;
+
                     @Override
-                    public void run() {
+                    protected Void doInBackground(Void... params) {
+                        SharedPreferences settings = MainToday.this.getContext().getSharedPreferences("netsetting", 0);
+                        String netname = settings.getString("netname", "");
                         try {
 
                             SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
                             Cursor netCursor = dbHelper.getReadableDatabase().query("today_orders", new String[]{"senddate", "recvname", "recvnum",
                                     "destination", "out", "sendname", "sendnum", "sendid", "pinname", "package", "count", "baojia",
-                                    "xianfu", "tifu", "daishou","beizhu","xiugaibeizhu","deleteornot"}, "senddate like ? and net='NO'", new String[]{"%"}, null, null, null, null);
+                                    "xianfu", "tifu", "daishou", "beizhu", "xiugaibeizhu", "deleteornot", "goodno"}, "senddate like ? and net='NO'", new String[]{"%"}, null, null, null, null);
 
                             while (netCursor.moveToNext()) {
                                 sqLiteDatabase.execSQL("update today_orders set net='YES' where senddate='" + netCursor.getString(0) + "'");
@@ -285,9 +294,69 @@ public class MainToday extends Fragment implements View.OnClickListener {
                                         + "&baojia=" + URLEncoder.encode(netCursor.getString(11), "utf-8") + "&xianfu=" + URLEncoder.encode(netCursor.getString(12), "utf-8")
                                         + "&tifu=" + URLEncoder.encode(netCursor.getString(13), "utf-8") + "&daishou=" + URLEncoder.encode(netCursor.getString(14), "utf-8")
                                         + "&beizhu=" + URLEncoder.encode(netCursor.getString(15), "utf-8") + "&xiugaibeizhu=" + URLEncoder.encode(netCursor.getString(16), "utf-8")
-                                        + "&deleteornot=" + URLEncoder.encode(netCursor.getString(17), "utf-8");
-                                //String urlEncoding = "http://192.168.1.13:8080/dongtai/servlet/DongTaiServlet?" + data;
-                                String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/DongTaiServlet?" + data;
+                                        + "&deleteornot=" + URLEncoder.encode(netCursor.getString(17), "utf-8") + "&goodNum=" + URLEncoder.encode(netCursor.getString(18), "utf-8")
+                                        + "&netName=" + URLEncoder.encode(netname, "utf-8");
+                                String urlEncoding = "http://192.168.1.11:8080/dongtai/servlet/DongTaiServlet?" + data;
+                                //String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/DongTaiServlet?" + data;
+                                URL url = new URL(urlEncoding);
+                                System.out.println("urlEncoding------------>" + urlEncoding);
+                                HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
+                                httpUrlConnection.setRequestMethod("GET");
+                                //httpUrlConnection.setConnectTimeout(10000);
+                                //httpUrlConnection.setReadTimeout(5000);
+                                httpUrlConnection.connect();
+                                //注意这里要获取返回的数据，否则不能成功提交????????
+                                int code = httpUrlConnection.getResponseCode();
+                                //System.out.println("code------------>" + code);
+                                Thread.sleep(200);
+                            }
+                        } catch (Exception e) {
+                            System.out.println("...................>" + e.getMessage().toString());
+                        }
+                        publishProgress(0);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        dialog = ProgressDialog.show(MainToday.this.getContext(), "登录提示", "正在上传，请稍等...", false);
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        super.onProgressUpdate(values);
+                        dialog.dismiss();
+                    }
+                }.execute();
+
+
+                /*new Thread() {
+                    SharedPreferences settings = MainToday.this.getContext().getSharedPreferences("netsetting", 0);
+                    String netname = settings.getString("netname", "");
+                    @Override
+                    public void run() {
+                        try {
+
+                            SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
+                            Cursor netCursor = dbHelper.getReadableDatabase().query("today_orders", new String[]{"senddate", "recvname", "recvnum",
+                                    "destination", "out", "sendname", "sendnum", "sendid", "pinname", "package", "count", "baojia",
+                                    "xianfu", "tifu", "daishou","beizhu","xiugaibeizhu","deleteornot","goodno"}, "senddate like ? and net='NO'", new String[]{"%"}, null, null, null, null);
+
+                            while (netCursor.moveToNext()) {
+                                sqLiteDatabase.execSQL("update today_orders set net='YES' where senddate='" + netCursor.getString(0) + "'");
+                                String data = "senddate=" + URLEncoder.encode(netCursor.getString(0), "utf-8") + "&recvname=" + URLEncoder.encode(netCursor.getString(1), "utf-8") + "&recvnum=" + URLEncoder.encode(netCursor.getString(2), "utf-8")
+                                        + "&destination=" + URLEncoder.encode(netCursor.getString(3), "utf-8") + "&out=" + URLEncoder.encode(netCursor.getString(4), "utf-8")
+                                        + "&sendname=" + URLEncoder.encode(netCursor.getString(5), "utf-8") + "&sendnum=" + URLEncoder.encode(netCursor.getString(6), "utf-8")
+                                        + "&sendid=" + URLEncoder.encode(netCursor.getString(7), "utf-8") + "&pinname=" + URLEncoder.encode(netCursor.getString(8), "utf-8")
+                                        + "&package=" + URLEncoder.encode(netCursor.getString(9), "utf-8") + "&count=" + URLEncoder.encode(netCursor.getString(10), "utf-8")
+                                        + "&baojia=" + URLEncoder.encode(netCursor.getString(11), "utf-8") + "&xianfu=" + URLEncoder.encode(netCursor.getString(12), "utf-8")
+                                        + "&tifu=" + URLEncoder.encode(netCursor.getString(13), "utf-8") + "&daishou=" + URLEncoder.encode(netCursor.getString(14), "utf-8")
+                                        + "&beizhu=" + URLEncoder.encode(netCursor.getString(15), "utf-8") + "&xiugaibeizhu=" + URLEncoder.encode(netCursor.getString(16), "utf-8")
+                                        + "&deleteornot=" + URLEncoder.encode(netCursor.getString(17), "utf-8") + "&goodNum=" + URLEncoder.encode(netCursor.getString(18), "utf-8")
+                                        + "&netName=" + URLEncoder.encode(netname, "utf-8");
+                                String urlEncoding = "http://192.168.1.11:8080/dongtai/servlet/DongTaiServlet?" + data;
+                                //String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/DongTaiServlet?" + data;
                                 URL url = new URL(urlEncoding);
                                 System.out.println("urlEncoding------------>" + urlEncoding);
                                 HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
@@ -305,7 +374,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
                         }
 
                     }
-                }.start();
+                }.start();*/
                 break;
             default:
                 break;

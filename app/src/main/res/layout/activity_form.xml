@@ -10,8 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:gravity="left|center"
-        android:paddingLeft="70dp"
+        android:gravity="center"
         android:text="测试" />
 
 </RelativeLayout>

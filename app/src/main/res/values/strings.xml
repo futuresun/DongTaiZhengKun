@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DongTaiZhengKun</string>
+    <string name="app_name">物流管理</string>
     <string name="action_settings">Settings</string>
     <string name="send_date">发货时间</string>
     <string name="No">货号</string>
@@ -8,7 +8,7 @@
     <string name="receiver">收货人</string>
     <string name="shipper">发货人</string>
     <string name="shipper_num">发货人电话</string>
-    <string name="shipper_ID">发货人身份证号码</string>
+    <string name="shipper_ID">发货人ID</string>
     <string name="outward">外转</string>
     <string name="product_name">品名</string>
     <string name="count">件数</string>

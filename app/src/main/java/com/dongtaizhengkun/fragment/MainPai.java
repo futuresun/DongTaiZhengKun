@@ -1,8 +1,12 @@
 package com.dongtaizhengkun.fragment;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -48,6 +52,8 @@ public class MainPai extends Fragment implements View.OnClickListener {
     private EditText recv_name;
     @ViewInject(R.id.recv_num)
     private EditText recv_num;
+    @ViewInject(R.id.ordernum)
+    private EditText ordernum;
     @ViewInject(R.id.search_pai)
     private Button search_pai;
     @ViewInject(R.id.pailist)
@@ -123,8 +129,8 @@ public class MainPai extends Fragment implements View.OnClickListener {
 
                                 try {
                                     String data = "sendtime=" + URLEncoder.encode(data2.get(0), "utf-8") + "&recvtime=" + URLEncoder.encode(simpleDateFormat.format(date), "utf-8") + "&recvmoney=" + URLEncoder.encode(editText.getText().toString(), "utf-8");
-                                    //String urlEncoding = "http://192.168.1.13:8080/dongtai/servlet/CheckOutServlet?" + data;
-                                    String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/CheckOutServlet?" + data;
+                                    String urlEncoding = "http://192.168.1.11:8080/dongtai/servlet/CheckOutServlet?" + data;
+                                    //String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/CheckOutServlet?" + data;
                                     URL url = null;
                                     url = new URL(urlEncoding);
                                     HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
@@ -160,18 +166,96 @@ public class MainPai extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        datalist.clear();
         final String rname = recv_name.getText().toString();
         final String rnum = recv_num.getText().toString();
+        final String orderNum = ordernum.getText().toString();
         SharedPreferences settings = this.getContext().getSharedPreferences("netsetting", 0);
         final String netname = settings.getString("netname", "");
 
-        new Thread() {
+        new AsyncTask<Void, Integer, Void>() {
+            private ProgressDialog dialog = null;
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    String data = "rname=" + URLEncoder.encode(rname, "utf-8") + "&rnum=" + URLEncoder.encode(rnum, "utf-8") + "&orderNum=" + URLEncoder.encode(orderNum, "utf-8") + "&netname=" + URLEncoder.encode(netname, "utf-8");
+                    String urlEncoding = "http://192.168.1.11:8080/dongtai/servlet/PaiDanServlet?" + data;
+                    //String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/PaiDanServlet?" + data;
+                    URL url = new URL(urlEncoding);
+                    HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
+                    httpUrlConnection.setRequestMethod("GET");
+                    //建立TCP连接的
+                    httpUrlConnection.connect();
+                    //这里才是真正进行发送
+                    int code = httpUrlConnection.getResponseCode();
+                    InputStream inputStream = httpUrlConnection.getInputStream();
+
+                    BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                    StringBuilder responseStrBuilder = new StringBuilder();
+
+                    String inputStr;
+                    while ((inputStr = streamReader.readLine()) != null) {
+                        responseStrBuilder.append(inputStr);
+                    }
+                    JSONArray jsonArray = new JSONArray(responseStrBuilder.toString());
+
+
+                    data1 = new ArrayList<List<String>>();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        data2 = new ArrayList<String>();
+                        datalist.add(jsonObject.getString("senddate") + "  收货方: " + jsonObject.getString("recvname"));
+                        data2.add(jsonObject.getString("senddate"));
+                        data2.add(jsonObject.getString("recvname"));
+                        data2.add(jsonObject.getString("recvnum"));
+                        data2.add(jsonObject.getString("destination"));
+                        data2.add(jsonObject.getString("out1"));
+                        data2.add(jsonObject.getString("sendname"));
+                        data2.add(jsonObject.getString("sendnum"));
+                        data2.add(jsonObject.getString("sendid"));
+                        data2.add(jsonObject.getString("pinname"));
+                        data2.add(jsonObject.getString("package"));
+                        data2.add(jsonObject.getString("count"));
+                        data2.add(jsonObject.getString("baojia"));
+                        data2.add(jsonObject.getString("xianfu"));
+                        data2.add(jsonObject.getString("tifu"));
+                        data2.add(jsonObject.getString("daishou"));
+                        data2.add(jsonObject.getString("beizhu"));
+                        data1.add(data2);
+                    }
+                    handler.sendMessage(handler.obtainMessage());
+                    //System.out.println(jsonArray.length());
+                    //System.out.println(jsonArray.toString());
+                    //System.out.println("code------------>" + code);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                publishProgress(0);
+                return null;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                dialog = ProgressDialog.show(MainPai.this.getContext(), "登录提示", "正在加载，请稍等...", false);
+            }
+
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+                dialog.dismiss();
+            }
+        }.execute();
+
+
+        /*new Thread() {
             @Override
             public void run() {
                 try {
-                    String data = "rname=" + URLEncoder.encode(rname, "utf-8") + "&rnum=" + URLEncoder.encode(rnum, "utf-8") + "&netname=" + URLEncoder.encode(netname, "utf-8");
-                    //String urlEncoding = "http://192.168.1.13:8080/dongtai/servlet/PaiDanServlet?" + data;
-                    String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/PaiDanServlet?" + data;
+                    String data = "rname=" + URLEncoder.encode(rname, "utf-8") + "&rnum=" + URLEncoder.encode(rnum, "utf-8") + "&orderNum=" + URLEncoder.encode(orderNum, "utf-8") + "&netname=" + URLEncoder.encode(netname, "utf-8");
+                    String urlEncoding = "http://192.168.1.11:8080/dongtai/servlet/PaiDanServlet?" + data;
+                    //String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/PaiDanServlet?" + data;
                     URL url = new URL(urlEncoding);
                     HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
                     httpUrlConnection.setRequestMethod("GET");
@@ -222,6 +306,6 @@ public class MainPai extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                 }
             }
-        }.start();
+        }.start();*/
     }
 }
