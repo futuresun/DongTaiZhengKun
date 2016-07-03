@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context=".SearchBQActivity" >
+
+    <Button
+        android:id="@+id/btOpenDialogue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="openPortDialogueClicked"
+        android:text="Open connect dialogue" />
+
+    <Button
+        android:id="@+id/btPrintTestPage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Print test page"
+        android:onClick="printTestPageClicked"
+        />
+
+
+    <Button
+        android:id="@+id/btGetStatusID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get printer status"
+        android:onClick="getPrinterCommandTypeClicked"
+        />
+
+    <Button
+        android:id="@+id/btGetStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get printer status"
+        android:onClick="getPrinterStatusClicked"
+        />
+
+</LinearLayout>

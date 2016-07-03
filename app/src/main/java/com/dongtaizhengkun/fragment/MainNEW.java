@@ -7,11 +7,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,19 +30,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dongtaizhengkun.R;
+import com.dongtaizhengkun.SearchBQActivity;
 import com.dongtaizhengkun.WelcomeActivity;
+import com.dongtaizhengkun.utils.Constant;
 import com.dongtaizhengkun.utils.DBHelper;
 import com.dongtaizhengkun.utils.Global;
 import com.dongtaizhengkun.utils.WorkService;
+import com.gprinter.command.EscCommand;
+import com.gprinter.command.GpCom;
+import com.gprinter.command.TscCommand;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lvrenyang.utils.DataUtils;
+
+import org.apache.commons.lang.ArrayUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Administrator on 2016/6/2.
@@ -107,6 +118,10 @@ public class MainNEW extends Fragment implements View.OnClickListener {
     private EditText prepay;
     @ViewInject(R.id.afterpay)
     private EditText afterpay;
+    @ViewInject(R.id.huikou)
+    private EditText huikou;
+    @ViewInject(R.id.dianfu)
+    private EditText dianfu;
     @ViewInject(R.id.unrecev)
     private EditText unrecev;
     @ViewInject(R.id.remark)
@@ -126,10 +141,13 @@ public class MainNEW extends Fragment implements View.OnClickListener {
             new AlertDialog.Builder(MainNEW.this.getContext()).setTitle("未配置网点信息,请先登录").setPositiveButton("确认", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    android.support.v4.app.FragmentManager fragmentManager = MainNEW.this.getFragmentManager();
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.fragmentId, new MainHome());
-                    transaction.commit();
+                    WelcomeActivity.mainBtn.setChecked(true);
+                }
+            }).show();
+        } else if (!Constant.connect) {
+            new AlertDialog.Builder(MainNEW.this.getContext()).setTitle("未连接蓝牙订单打印机").setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
                     WelcomeActivity.mainBtn.setChecked(true);
                 }
             }).show();
@@ -147,6 +165,8 @@ public class MainNEW extends Fragment implements View.OnClickListener {
         insurance.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         prepay.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         afterpay.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+        huikou.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+        dianfu.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         unrecev.setInputType(EditorInfo.TYPE_CLASS_PHONE);
 
         dbHelper = DBHelper.getInstance(inflater.getContext());
@@ -313,7 +333,7 @@ public class MainNEW extends Fragment implements View.OnClickListener {
                         SharedPreferences settings = MainNEW.this.getContext().getSharedPreferences("netsetting", 0);
 
                         Date date = new Date();
-                        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyMMdd");
                         SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -404,6 +424,92 @@ public class MainNEW extends Fragment implements View.OnClickListener {
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
+
+
+                        try {
+                            // 尝试打印
+                            TscCommand tsc = new TscCommand();
+                            tsc.addSize(50, 40);
+                            tsc.addGap(2);
+                            tsc.addDirection(TscCommand.DIRECTION.BACKWARD, TscCommand.MIRROR.NORMAL);
+                            tsc.addReference(0, 0);
+                            tsc.addTear(EscCommand.ENABLE.OFF);
+                            tsc.addCls();
+
+                            tsc.addBox(10, 10, 380, 300);
+                            //tsc.addErase(18, 18, 364, 284);
+                            tsc.addErase(18, 18, 364, 69);
+
+                            tsc.addErase(18, 89, 364, 69);
+
+                            tsc.addErase(18, 161, 117, 69);
+                            tsc.addErase(141, 161, 117, 69);
+                            tsc.addErase(264, 161, 117, 69);
+
+                            tsc.addErase(18, 233, 117, 69);
+                            tsc.addErase(141, 233, 240, 69);
+
+                            tsc.addText(50, 30, TscCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+                                    TscCommand.ROTATION.ROTATION_0, TscCommand.FONTMUL.MUL_2, TscCommand.FONTMUL.MUL_2,
+                                    "东泰正坤物流");
+                            tsc.addText(55, 109, TscCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+                                    TscCommand.ROTATION.ROTATION_0, TscCommand.FONTMUL.MUL_2, TscCommand.FONTMUL.MUL_1,
+                                    settings.getString("netname", "") + "->" + destination.getText().toString());
+                            tsc.addText(30, 172, TscCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+                                    TscCommand.ROTATION.ROTATION_0, TscCommand.FONTMUL.MUL_2, TscCommand.FONTMUL.MUL_2,
+                                    "件数");
+                            tsc.addText(151, 182, TscCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+                                    TscCommand.ROTATION.ROTATION_0, TscCommand.FONTMUL.MUL_2, TscCommand.FONTMUL.MUL_1,
+                                    count.getText().toString());
+                            tsc.addText(274, 182, TscCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+                                    TscCommand.ROTATION.ROTATION_0, TscCommand.FONTMUL.MUL_2, TscCommand.FONTMUL.MUL_1,
+                                    recvname.getText().toString());
+                            tsc.addText(30, 243, TscCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+                                    TscCommand.ROTATION.ROTATION_0, TscCommand.FONTMUL.MUL_2, TscCommand.FONTMUL.MUL_2,
+                                    "单号");
+                            tsc.addText(151, 253, TscCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+                                    TscCommand.ROTATION.ROTATION_0, TscCommand.FONTMUL.MUL_2, TscCommand.FONTMUL.MUL_1,
+                                    goodNum);
+
+                            tsc.addPrint(1, 1);
+                            tsc.addSound(2, 100);
+                            Vector<Byte> datas = tsc.getCommand(); // 发送数据
+                            Byte[] Bytes = datas.toArray(new Byte[datas.size()]);
+                            byte[] bytes = ArrayUtils.toPrimitive(Bytes);
+                            String str = Base64.encodeToString(bytes, Base64.DEFAULT);
+                            int rel = MainHome.mGpService.sendTscCommand(0, str);
+                            //int rel = mGpService.printeTestPage(mPrinterIndex);
+
+                            Toast.makeText(MainNEW.this.getContext(), rel + "",
+                                    Toast.LENGTH_SHORT).show();
+                            // int rel = mGpService.printeTestPage(mPrinterIndex); //
+                            Log.i("ServiceConnection", "rel " + rel);
+                            GpCom.ERROR_CODE r = GpCom.ERROR_CODE.values()[rel];
+                            if (r != GpCom.ERROR_CODE.SUCCESS) {
+                                Toast.makeText(MainNEW.this.getContext(), GpCom.getErrorText(r),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (RemoteException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+
+                        recvname.setText("");
+                        recvnum.setText("");
+                        sendname.setText("");
+                        sendnum.setText("");
+                        sendid.setText("");
+                        destination.setText("");
+                        outward.setText("");
+                        product_name.setText("");
+                        count.setText("");
+                        packing.setText("");
+                        insurance.setText("");
+                        prepay.setText("");
+                        afterpay.setText("");
+                        unrecev.setText("");
+                        remark.setText("");
+
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -422,10 +528,12 @@ public class MainNEW extends Fragment implements View.OnClickListener {
     class MyClickListener implements View.OnClickListener {
         String tableName;
         String[] searchItems;
+
         public MyClickListener(String tableName, String[] searchItems) {
             this.tableName = tableName;
             this.searchItems = searchItems;
         }
+
         @Override
         public void onClick(View v) {
             View myView = MainNEW.this.getLayoutInflater(null).inflate(R.layout.choose, null);
@@ -434,12 +542,12 @@ public class MainNEW extends Fragment implements View.OnClickListener {
             final List<Integer> num = new ArrayList<Integer>();
             final List<String> sid = new ArrayList<String>();
             final AlertDialog.Builder builder = new AlertDialog.Builder(MainNEW.this.getContext());
-            while(cursor.moveToNext()) {
+            while (cursor.moveToNext()) {
                 data.add(cursor.getString(0));
-                if(tableName.equals("recv_contact") || tableName.equals("send_contact")) {
+                if (tableName.equals("recv_contact") || tableName.equals("send_contact")) {
                     num.add(cursor.getInt(1));
                 }
-                if(tableName.equals("send_contact")) {
+                if (tableName.equals("send_contact")) {
                     sid.add(cursor.getString(2));
                 }
             }
@@ -449,18 +557,18 @@ public class MainNEW extends Fragment implements View.OnClickListener {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     chooseFlag = true;
-                    if(tableName.equals("recv_contact")) {
+                    if (tableName.equals("recv_contact")) {
                         recvname.setText(data.get(position));
-                        recvnum.setText(num.get(position)+"");
-                    } else if(tableName.equals("send_contact")) {
+                        recvnum.setText(num.get(position) + "");
+                    } else if (tableName.equals("send_contact")) {
                         sendname.setText(data.get(position));
-                        sendnum.setText(num.get(position)+"");
+                        sendnum.setText(num.get(position) + "");
                         sendid.setText(sid.get(position));
-                    } else if(tableName.equals("destination")) {
+                    } else if (tableName.equals("destination")) {
                         destination.setText(data.get(position));
-                    } else if(tableName.equals("out_station")) {
+                    } else if (tableName.equals("out_station")) {
                         outward.setText(data.get(position));
-                    } else if(tableName.equals("product_name")) {
+                    } else if (tableName.equals("product_name")) {
                         product_name.setText(data.get(position));
                     } else {
                         packing.setText(data.get(position));
@@ -511,7 +619,7 @@ class MyTextWatcher implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if(fragment.chooseFlag) return;
+        if (fragment.chooseFlag) return;
         String key = editText.getText().toString();
         List<String> data = new ArrayList<String>();
         if (!key.equals("")) {

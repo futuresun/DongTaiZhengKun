@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.dongtaizhengkun.utils.Constant;
 import com.dongtaizhengkun.utils.Global;
 import com.dongtaizhengkun.utils.WorkService;
 import com.lvrenyang.utils.DataUtils;
@@ -172,6 +173,9 @@ public class SearchBTActivity extends Activity implements OnClickListener {
 
                 case Global.MSG_WORKTHREAD_SEND_CONNECTBTRESULT: {
                     int result = msg.arg1;
+                    if (1 == result) {
+                        Constant.connect = true;
+                    }
                     Toast.makeText(
                             theActivity,
                             (result == 1) ? Global.toast_success

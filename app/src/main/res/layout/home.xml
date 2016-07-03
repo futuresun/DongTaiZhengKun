@@ -1,158 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dip">
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dip">
 
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="用户名"
-            android:textSize="20sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
 
-        <EditText
-            android:id="@+id/user"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@drawable/editt"
-            android:gravity="center"
-            android:textSize="20sp" />
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="用户名"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/user"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:gravity="center"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingBottom="20dip"
+            android:paddingTop="20dip"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="密码"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/psd"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:gravity="center"
+                android:password="true"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="网点登录"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingTop="20dip"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="网点编号"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/netnum"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:gravity="center"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingTop="20dip"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="网点地址"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/netaddr"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:gravity="center"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingTop="20dip"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="起点地址"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/startaddr"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:gravity="center"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingBottom="20dip"
+            android:paddingTop="20dip"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="受理人"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/authors"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:gravity="center"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/deletelist"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="清空订单缓存数据"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/deletecontact"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="清空联系人数据"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/BTconnect"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="连接订单打印机"
+            android:layout_weight="1" />
+        <Button
+            android:id="@+id/BQconnect"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="连接标签打印机"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/printForm"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="测试打印机"
+            android:layout_weight="1" />
+
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="20dip"
-        android:paddingTop="20dip">
-
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="密码"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/psd"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:password="true"
-            android:background="@drawable/editt"
-            android:gravity="center"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-
-    <Button
-        android:id="@+id/login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="网点登录" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dip"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="网点编号"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/netnum"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@drawable/editt"
-            android:gravity="center"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dip"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:text="网点地址"/>
-        <TextView
-            android:id="@+id/netaddr"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@drawable/editt"
-            android:gravity="center"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="20dip"
-        android:paddingTop="20dip"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:text="受理人"/>
-        <TextView
-            android:id="@+id/authors"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@drawable/editt"
-            android:gravity="center"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/deletelist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="清空订单缓存数据" />
-
-    <Button
-        android:id="@+id/deletecontact"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="清空联系人数据" />
-
-    <Button
-        android:id="@+id/BTconnect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="连接订单打印机" />
-
-    <Button
-        android:id="@+id/printForm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="测试打印机" />
-</LinearLayout>
+</ScrollView>

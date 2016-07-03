@@ -52,7 +52,7 @@
             android:scaleY="0.8"
             android:drawableTop="@drawable/main_search"
             android:gravity="center"
-            android:text="今日\n订单"
+            android:text="订单\n管理"
             android:textColor="@drawable/text_color"/>
 
         <RadioButton

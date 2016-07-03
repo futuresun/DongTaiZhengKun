@@ -12,10 +12,165 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical">
 
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/shipper" />
+
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+
+                <EditText
+                    android:id="@+id/sendname"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@drawable/editt"
+                    android:gravity="center"
+                    android:textSize="20dp" />
+
+                <Button
+                    android:id="@+id/sendnamechoose"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="选择" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/list_sendout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+
+            <ListView
+                android:id="@+id/list_send"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"></ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingTop="15dip"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/shipper_num" />
+
+            <EditText
+                android:id="@+id/sendnum"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:digits="1234567890"
+                android:gravity="center"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/list_sendnumout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+
+            <ListView
+                android:id="@+id/list_sendnum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"></ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingTop="15dip"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/shipper_ID" />
+
+            <EditText
+                android:id="@+id/sendid"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:digits="1234567890Xx"
+                android:gravity="center"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/list_sendidout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+
+            <ListView
+                android:id="@+id/list_sendid"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"></ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -54,9 +209,10 @@
         <LinearLayout
             android:id="@+id/list_recvout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -73,9 +229,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -101,9 +258,10 @@
         <LinearLayout
             android:id="@+id/list_recvnumout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -120,156 +278,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/shipper" />
-
-
-            <LinearLayout
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="2">
-
-                <EditText
-                    android:id="@+id/sendname"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:background="@drawable/editt"
-                    android:gravity="center"
-                    android:textSize="20dp" />
-
-                <Button
-                    android:id="@+id/sendnamechoose"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="选择" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/list_sendout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
-
-            <ListView
-                android:id="@+id/list_send"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"></ListView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="15dip">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/shipper_num" />
-
-            <EditText
-                android:id="@+id/sendnum"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:background="@drawable/editt"
-                android:digits="1234567890"
-                android:gravity="center"
-                android:textSize="20dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/list_sendnumout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
-
-            <ListView
-                android:id="@+id/list_sendnum"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"></ListView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="15dip">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/shipper_ID" />
-
-            <EditText
-                android:id="@+id/sendid"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:background="@drawable/editt"
-                android:digits="1234567890Xx"
-                android:gravity="center"
-                android:textSize="20dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/list_sendidout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
-
-            <ListView
-                android:id="@+id/list_sendid"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"></ListView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -306,9 +318,10 @@
         <LinearLayout
             android:id="@+id/list_destinationout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -325,9 +338,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -363,9 +377,10 @@
         <LinearLayout
             android:id="@+id/list_outwardout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -382,9 +397,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -420,9 +436,10 @@
         <LinearLayout
             android:id="@+id/list_pnameout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -439,9 +456,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -477,9 +495,10 @@
         <LinearLayout
             android:id="@+id/list_packingout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -496,9 +515,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -520,9 +540,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -544,9 +565,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -568,9 +590,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -592,9 +615,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -616,9 +640,58 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="15dip">
+            android:paddingTop="15dip"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="回扣" />
+
+            <EditText
+                android:id="@+id/huikou"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:digits="1234567890"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingTop="15dip"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="垫付中转费" />
+
+            <EditText
+                android:id="@+id/dianfu"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/editt"
+                android:digits="1234567890"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="0dp"
@@ -639,8 +712,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dip">
+            android:layout_height="0dp"
+            android:paddingTop="15dip"
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/commit"
