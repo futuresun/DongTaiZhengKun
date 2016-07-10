@@ -138,6 +138,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
                 View myView = MainToday.this.getLayoutInflater(null).inflate(R.layout.dialog, null);
 
                 TextView sdate = (TextView) myView.findViewById(R.id.stime);
+                TextView sgoodno = (TextView) myView.findViewById(R.id.sgoodno);
                 final EditText rname = (EditText) myView.findViewById(R.id.rname);
                 final EditText rnum = (EditText) myView.findViewById(R.id.rnum);
                 final EditText dest = (EditText) myView.findViewById(R.id.rdes);
@@ -169,8 +170,10 @@ public class MainToday extends Fragment implements View.OnClickListener {
                 final String afterpay = data1.get(position).get(13);
                 final String unpay = data1.get(position).get(14);
                 final String xiugaibeizhu = data1.get(position).get(16);
+                final String goodno = data1.get(position).get(17);
 
                 sdate.setText(listtime);
+                sgoodno.setText(goodno);
                 rname.setText(recvname);
                 rnum.setText(recvnum);
                 dest.setText(des);
@@ -385,7 +388,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
                 data1 = new ArrayList<List<String>>();
                 while (cursor.moveToNext()) {
                     data2 = new ArrayList<String>();
-                    data.add(cursor.getString(0) + "  收货方: " + cursor.getString(1));
+                    data.add(cursor.getString(17) + "  收货方: " + cursor.getString(1));
                     data2.add(cursor.getString(0));
                     data2.add(cursor.getString(1));
                     data2.add(cursor.getString(2));
@@ -438,7 +441,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
                         data1 = new ArrayList<List<String>>();
                         while (cursor.moveToNext()) {
                             data2 = new ArrayList<String>();
-                            sdata.add(cursor.getString(0) + "  收货方: " + cursor.getString(1));
+                            sdata.add(cursor.getString(17) + "  收货方: " + cursor.getString(1));
                             data2.add(cursor.getString(0));
                             data2.add(cursor.getString(1));
                             data2.add(cursor.getString(2));
@@ -515,7 +518,7 @@ public class MainToday extends Fragment implements View.OnClickListener {
                                     titleText = new ArrayList<String>();
                                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                                     data2 = new ArrayList<String>();
-                                    titleText.add(jsonObject.getString("senddate") + "  收货方: " + jsonObject.getString("recvname"));
+                                    titleText.add(jsonObject.getString("goodNum") + "  收货方: " + jsonObject.getString("recvname"));
                                     data2.add(jsonObject.getString("senddate"));
                                     data2.add(jsonObject.getString("recvname"));
                                     data2.add(jsonObject.getString("recvnum"));
@@ -640,52 +643,6 @@ public class MainToday extends Fragment implements View.OnClickListener {
                         dialog.dismiss();
                     }
                 }.execute();
-
-
-                /*new Thread() {
-                    SharedPreferences settings = MainToday.this.getContext().getSharedPreferences("netsetting", 0);
-                    String netname = settings.getString("netname", "");
-                    @Override
-                    public void run() {
-                        try {
-
-                            SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
-                            Cursor netCursor = dbHelper.getReadableDatabase().query("today_orders", new String[]{"senddate", "recvname", "recvnum",
-                                    "destination", "out", "sendname", "sendnum", "sendid", "pinname", "package", "count", "baojia",
-                                    "xianfu", "tifu", "daishou","beizhu","xiugaibeizhu","deleteornot","goodno"}, "senddate like ? and net='NO'", new String[]{"%"}, null, null, null, null);
-
-                            while (netCursor.moveToNext()) {
-                                sqLiteDatabase.execSQL("update today_orders set net='YES' where senddate='" + netCursor.getString(0) + "'");
-                                String data = "senddate=" + URLEncoder.encode(netCursor.getString(0), "utf-8") + "&recvname=" + URLEncoder.encode(netCursor.getString(1), "utf-8") + "&recvnum=" + URLEncoder.encode(netCursor.getString(2), "utf-8")
-                                        + "&destination=" + URLEncoder.encode(netCursor.getString(3), "utf-8") + "&out=" + URLEncoder.encode(netCursor.getString(4), "utf-8")
-                                        + "&sendname=" + URLEncoder.encode(netCursor.getString(5), "utf-8") + "&sendnum=" + URLEncoder.encode(netCursor.getString(6), "utf-8")
-                                        + "&sendid=" + URLEncoder.encode(netCursor.getString(7), "utf-8") + "&pinname=" + URLEncoder.encode(netCursor.getString(8), "utf-8")
-                                        + "&package=" + URLEncoder.encode(netCursor.getString(9), "utf-8") + "&count=" + URLEncoder.encode(netCursor.getString(10), "utf-8")
-                                        + "&baojia=" + URLEncoder.encode(netCursor.getString(11), "utf-8") + "&xianfu=" + URLEncoder.encode(netCursor.getString(12), "utf-8")
-                                        + "&tifu=" + URLEncoder.encode(netCursor.getString(13), "utf-8") + "&daishou=" + URLEncoder.encode(netCursor.getString(14), "utf-8")
-                                        + "&beizhu=" + URLEncoder.encode(netCursor.getString(15), "utf-8") + "&xiugaibeizhu=" + URLEncoder.encode(netCursor.getString(16), "utf-8")
-                                        + "&deleteornot=" + URLEncoder.encode(netCursor.getString(17), "utf-8") + "&goodNum=" + URLEncoder.encode(netCursor.getString(18), "utf-8")
-                                        + "&netName=" + URLEncoder.encode(netname, "utf-8");
-                                String urlEncoding = "http://192.168.1.11:8080/dongtai/servlet/DongTaiServlet?" + data;
-                                //String urlEncoding = "http://23.105.215.22:8080/dongtai/servlet/DongTaiServlet?" + data;
-                                URL url = new URL(urlEncoding);
-                                System.out.println("urlEncoding------------>" + urlEncoding);
-                                HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
-                                httpUrlConnection.setRequestMethod("GET");
-                                //httpUrlConnection.setConnectTimeout(10000);
-                                //httpUrlConnection.setReadTimeout(5000);
-                                httpUrlConnection.connect();
-                                //注意这里要获取返回的数据，否则不能成功提交????????
-                                int code = httpUrlConnection.getResponseCode();
-                                //System.out.println("code------------>" + code);
-                                Thread.sleep(200);
-                            }
-                        } catch (Exception e) {
-                            System.out.println("...................>" + e.getMessage().toString());
-                        }
-
-                    }
-                }.start();*/
                 break;
             default:
                 break;

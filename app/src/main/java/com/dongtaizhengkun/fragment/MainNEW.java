@@ -144,14 +144,14 @@ public class MainNEW extends Fragment implements View.OnClickListener {
                     WelcomeActivity.mainBtn.setChecked(true);
                 }
             }).show();
-        } else if (!Constant.connect) {
-            new AlertDialog.Builder(MainNEW.this.getContext()).setTitle("未连接蓝牙订单打印机").setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    WelcomeActivity.mainBtn.setChecked(true);
-                }
-            }).show();
-        }
+        } //else if (!Constant.connect) {
+          //  new AlertDialog.Builder(MainNEW.this.getContext()).setTitle("未连接蓝牙订单打印机").setPositiveButton("确认", new DialogInterface.OnClickListener() {
+         //       @Override
+         //       public void onClick(DialogInterface dialog, int which) {
+         //           WelcomeActivity.mainBtn.setChecked(true);
+         //       }
+         //   }).show();
+       // }
 
 
         view = inflater.inflate(R.layout.main_layout, null);

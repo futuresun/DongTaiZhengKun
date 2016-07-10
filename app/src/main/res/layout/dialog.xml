@@ -41,6 +41,27 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="订单号" />
+
+            <TextView
+                android:id="@+id/sgoodno"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/editt"
+                android:gravity="center"
+                android:layout_weight="2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dip">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="收货人" />
 
             <EditText
